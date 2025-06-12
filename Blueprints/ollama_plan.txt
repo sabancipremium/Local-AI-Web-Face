@@ -1,0 +1,36 @@
+Ollama-Powered macOS App Development Plan
+
+Phase 1: Basic Interface
+1. Environment Setup
+- Install Ollama and pull a test model:
+  brew install ollama
+  ollama pull llama3.2
+2. Choose Framework
+- SwiftUI (recommended) or Electron/Tauri for cross-platform.
+3. Implement Chat View
+- TextField for user input.
+- Send button triggers HTTP POST to http://localhost:11434/api/chat.
+- Display response.choices[0].message.content in a scrollable text view.
+4. Error Handling & Loading States
+
+Phase 2: Model Management
+1. List Models
+- Call `ollama ps` via shell or API to populate a dropdown.
+2. Switch/Start/Stop Models
+- Use `ollama run <model>` and `ollama stop <model>` or REST endpoints.
+3. Persist User Selection
+- Save selected model in user preferences.
+
+Phase 3: Interactive Avatars & TTS
+1. Text-to-Speech
+- Use AVSpeechSynthesizer for on-device voices.
+2. Animated Avatars
+- Face & Lip Sync: Live2D Cubism SDK for 2D avatars.
+- Face Tracking: ARKit for mapping expressions to blendshapes.
+- Integration: Sync audio playback callbacks with avatar animations.
+
+Next Steps & Timeline
+- Week 1–2: Complete Phase 1 (MVP chat UI).
+- Week 3: Add Phase 2 (model changer).
+- Week 4–6: Prototype Phase 3 (TTS + simple avatar).
+- Ongoing: Polish UI/UX, optimize model loading, packaging.

@@ -1,0 +1,546 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		321DB7EE2DFB119D004B22C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 321DB7D72DFB119B004B22C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 321DB7DE2DFB119B004B22C4;
+			remoteInfo = "Local-AI-Web-Face";
+		};
+		321DB7F82DFB119D004B22C4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 321DB7D72DFB119B004B22C4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 321DB7DE2DFB119B004B22C4;
+			remoteInfo = "Local-AI-Web-Face";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		321DB7DF2DFB119B004B22C4 /* Local-AI-Web-Face.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Local-AI-Web-Face.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		321DB7ED2DFB119D004B22C4 /* Local-AI-Web-FaceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Local-AI-Web-FaceTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		321DB7F72DFB119D004B22C4 /* Local-AI-Web-FaceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Local-AI-Web-FaceUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		321DB7E12DFB119B004B22C4 /* Local-AI-Web-Face */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Local-AI-Web-Face";
+			sourceTree = "<group>";
+		};
+		321DB7F02DFB119D004B22C4 /* Local-AI-Web-FaceTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Local-AI-Web-FaceTests";
+			sourceTree = "<group>";
+		};
+		321DB7FA2DFB119D004B22C4 /* Local-AI-Web-FaceUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Local-AI-Web-FaceUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		321DB7DC2DFB119B004B22C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7EA2DFB119D004B22C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7F42DFB119D004B22C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		321DB7D62DFB119B004B22C4 = {
+			isa = PBXGroup;
+			children = (
+				321DB7E12DFB119B004B22C4 /* Local-AI-Web-Face */,
+				321DB7F02DFB119D004B22C4 /* Local-AI-Web-FaceTests */,
+				321DB7FA2DFB119D004B22C4 /* Local-AI-Web-FaceUITests */,
+				321DB7E02DFB119B004B22C4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		321DB7E02DFB119B004B22C4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				321DB7DF2DFB119B004B22C4 /* Local-AI-Web-Face.app */,
+				321DB7ED2DFB119D004B22C4 /* Local-AI-Web-FaceTests.xctest */,
+				321DB7F72DFB119D004B22C4 /* Local-AI-Web-FaceUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		321DB7DE2DFB119B004B22C4 /* Local-AI-Web-Face */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 321DB8012DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-Face" */;
+			buildPhases = (
+				321DB7DB2DFB119B004B22C4 /* Sources */,
+				321DB7DC2DFB119B004B22C4 /* Frameworks */,
+				321DB7DD2DFB119B004B22C4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				321DB7E12DFB119B004B22C4 /* Local-AI-Web-Face */,
+			);
+			name = "Local-AI-Web-Face";
+			packageProductDependencies = (
+			);
+			productName = "Local-AI-Web-Face";
+			productReference = 321DB7DF2DFB119B004B22C4 /* Local-AI-Web-Face.app */;
+			productType = "com.apple.product-type.application";
+		};
+		321DB7EC2DFB119D004B22C4 /* Local-AI-Web-FaceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 321DB8042DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-FaceTests" */;
+			buildPhases = (
+				321DB7E92DFB119D004B22C4 /* Sources */,
+				321DB7EA2DFB119D004B22C4 /* Frameworks */,
+				321DB7EB2DFB119D004B22C4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				321DB7EF2DFB119D004B22C4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				321DB7F02DFB119D004B22C4 /* Local-AI-Web-FaceTests */,
+			);
+			name = "Local-AI-Web-FaceTests";
+			packageProductDependencies = (
+			);
+			productName = "Local-AI-Web-FaceTests";
+			productReference = 321DB7ED2DFB119D004B22C4 /* Local-AI-Web-FaceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		321DB7F62DFB119D004B22C4 /* Local-AI-Web-FaceUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 321DB8072DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-FaceUITests" */;
+			buildPhases = (
+				321DB7F32DFB119D004B22C4 /* Sources */,
+				321DB7F42DFB119D004B22C4 /* Frameworks */,
+				321DB7F52DFB119D004B22C4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				321DB7F92DFB119D004B22C4 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				321DB7FA2DFB119D004B22C4 /* Local-AI-Web-FaceUITests */,
+			);
+			name = "Local-AI-Web-FaceUITests";
+			packageProductDependencies = (
+			);
+			productName = "Local-AI-Web-FaceUITests";
+			productReference = 321DB7F72DFB119D004B22C4 /* Local-AI-Web-FaceUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		321DB7D72DFB119B004B22C4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					321DB7DE2DFB119B004B22C4 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					321DB7EC2DFB119D004B22C4 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 321DB7DE2DFB119B004B22C4;
+					};
+					321DB7F62DFB119D004B22C4 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 321DB7DE2DFB119B004B22C4;
+					};
+				};
+			};
+			buildConfigurationList = 321DB7DA2DFB119B004B22C4 /* Build configuration list for PBXProject "Local-AI-Web-Face" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 321DB7D62DFB119B004B22C4;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 321DB7E02DFB119B004B22C4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				321DB7DE2DFB119B004B22C4 /* Local-AI-Web-Face */,
+				321DB7EC2DFB119D004B22C4 /* Local-AI-Web-FaceTests */,
+				321DB7F62DFB119D004B22C4 /* Local-AI-Web-FaceUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		321DB7DD2DFB119B004B22C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7EB2DFB119D004B22C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7F52DFB119D004B22C4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		321DB7DB2DFB119B004B22C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7E92DFB119D004B22C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		321DB7F32DFB119D004B22C4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		321DB7EF2DFB119D004B22C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 321DB7DE2DFB119B004B22C4 /* Local-AI-Web-Face */;
+			targetProxy = 321DB7EE2DFB119D004B22C4 /* PBXContainerItemProxy */;
+		};
+		321DB7F92DFB119D004B22C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 321DB7DE2DFB119B004B22C4 /* Local-AI-Web-Face */;
+			targetProxy = 321DB7F82DFB119D004B22C4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		321DB7FF2DFB119D004B22C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		321DB8002DFB119D004B22C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		321DB8022DFB119D004B22C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Local-AI-Web-Face/Local_AI_Web_Face.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-Face";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		321DB8032DFB119D004B22C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Local-AI-Web-Face/Local_AI_Web_Face.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-Face";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		321DB8052DFB119D004B22C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-FaceTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Local-AI-Web-Face.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Local-AI-Web-Face";
+			};
+			name = Debug;
+		};
+		321DB8062DFB119D004B22C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-FaceTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Local-AI-Web-Face.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Local-AI-Web-Face";
+			};
+			name = Release;
+		};
+		321DB8082DFB119D004B22C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-FaceUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Local-AI-Web-Face";
+			};
+			name = Debug;
+		};
+		321DB8092DFB119D004B22C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zort.Local-AI-Web-FaceUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Local-AI-Web-Face";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		321DB7DA2DFB119B004B22C4 /* Build configuration list for PBXProject "Local-AI-Web-Face" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321DB7FF2DFB119D004B22C4 /* Debug */,
+				321DB8002DFB119D004B22C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		321DB8012DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-Face" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321DB8022DFB119D004B22C4 /* Debug */,
+				321DB8032DFB119D004B22C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		321DB8042DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-FaceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321DB8052DFB119D004B22C4 /* Debug */,
+				321DB8062DFB119D004B22C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		321DB8072DFB119D004B22C4 /* Build configuration list for PBXNativeTarget "Local-AI-Web-FaceUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				321DB8082DFB119D004B22C4 /* Debug */,
+				321DB8092DFB119D004B22C4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 321DB7D72DFB119B004B22C4 /* Project object */;
+}
