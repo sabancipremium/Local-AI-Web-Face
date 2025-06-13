@@ -158,10 +158,13 @@ class OllamaService: ObservableObject {
     
     func checkConnection() async {
         do {
-            _ = try await getAvailableModels()
+            NSLog("[OllamaService] Checking connection to Ollama at: \(baseURL)")
+            let models = try await getAvailableModels()
+            NSLog("[OllamaService] Connection successful! Found \(models.count) models: \(models)")
             isConnected = true
             connectionError = nil
         } catch {
+            NSLog("[OllamaService] Connection failed with error: \(error)")
             isConnected = false
             connectionError = error.localizedDescription
         }
@@ -196,7 +199,8 @@ class OllamaService: ObservableObject {
                     urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     urlRequest.httpBody = requestData
                     
-                    let (data, response) = try await urlSession.data(for: urlRequest)
+                    // Use URLSession.bytes to handle streaming properly
+                    let (asyncBytes, response) = try await urlSession.bytes(for: urlRequest)
                     
                     guard let httpResponse = response as? HTTPURLResponse else {
                         continuation.finish(throwing: OllamaError.invalidResponse)
@@ -208,35 +212,45 @@ class OllamaService: ObservableObject {
                         return
                     }
                     
-                    // Parse streaming response
-                    let dataString = String(data: data, encoding: .utf8) ?? ""
-                    let lines = dataString.components(separatedBy: .newlines)
+                    // Process streaming response line by line
+                    var buffer = ""
                     
-                    for line in lines {
-                        let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard !trimmedLine.isEmpty else { continue }
+                    for try await byte in asyncBytes {
+                        let character = Character(UnicodeScalar(byte))
                         
-                        do {
-                            let chunk = try decoder.decode(ChatResponseChunk.self, from: Data(trimmedLine.utf8))
+                        if character == "\n" {
+                            // Process complete line
+                            let line = buffer.trimmingCharacters(in: .whitespacesAndNewlines)
+                            buffer = ""
                             
-                            if let content = chunk.message?.content, !content.isEmpty {
-                                continuation.yield(content)
-                            }
+                            guard !line.isEmpty else { continue }
                             
-                            if chunk.done {
-                                continuation.finish()
-                                return
+                            do {
+                                let chunk = try decoder.decode(ChatResponseChunk.self, from: Data(line.utf8))
+                                
+                                if let content = chunk.message?.content, !content.isEmpty {
+                                    continuation.yield(content)
+                                }
+                                
+                                if chunk.done {
+                                    continuation.finish()
+                                    return
+                                }
+                            } catch {
+                                // Skip malformed JSON chunks but continue processing
+                                NSLog("[OllamaService] Failed to decode chunk: \(line), error: \(error)")
+                                continue
                             }
-                        } catch {
-                            // Skip malformed JSON chunks but continue processing
-                            continue
+                        } else {
+                            buffer.append(character)
                         }
                     }
                     
                     continuation.finish()
                     
                 } catch {
-                    continuation.finish(throwing: error)
+                    NSLog("[OllamaService] Chat error: \(error)")
+                    continuation.finish(throwing: OllamaError.networkError(error))
                 }
             }
         }
@@ -248,22 +262,34 @@ class OllamaService: ObservableObject {
         let url = baseURL.appendingPathComponent("tags")
         
         do {
+            NSLog("[OllamaService] Fetching models from: \(url)")
             let (data, response) = try await urlSession.data(from: url)
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw OllamaError.invalidResponse
             }
             
+            NSLog("[OllamaService] HTTP response status: \(httpResponse.statusCode)")
+            
             guard httpResponse.statusCode == 200 else {
                 throw OllamaError.httpError(httpResponse.statusCode)
             }
             
             let tagsResponse = try decoder.decode(OllamaTagsResponse.self, from: data)
+            NSLog("[OllamaService] Successfully decoded \(tagsResponse.models.count) models")
             return tagsResponse.models.map { $0.name }
             
         } catch let error as DecodingError {
+            NSLog("[OllamaService] JSON decoding error: \(error)")
             throw OllamaError.decodingError(error)
+        } catch let urlError as URLError {
+            NSLog("[OllamaService] URL error: \(urlError)")
+            if urlError.code == .cannotConnectToHost {
+                throw OllamaError.connectionFailed
+            }
+            throw OllamaError.networkError(urlError)
         } catch {
+            NSLog("[OllamaService] General network error: \(error)")
             throw OllamaError.networkError(error)
         }
     }

@@ -50,7 +50,10 @@ class ChatViewModel: ObservableObject {
         
         // Observe connection status
         ollamaService.$isConnected
-            .assign(to: \.isConnected, on: self)
+            .sink { [weak self] connected in
+                NSLog("ChatViewModel: Connection status changed to: \(connected)")
+                self?.isConnected = connected
+            }
             .store(in: &cancellables)
         
         // Clear error message when input changes
@@ -64,6 +67,8 @@ class ChatViewModel: ObservableObject {
     private func loadInitialState() {
         currentModelName = modelManager.selectedModelName ?? ""
         isConnected = ollamaService.isConnected
+        
+        NSLog("ChatViewModel: Initial state - model: '\(currentModelName)', connected: \(isConnected)")
         
         // Add welcome message if no messages exist
         if messages.isEmpty {

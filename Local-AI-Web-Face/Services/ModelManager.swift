@@ -33,6 +33,8 @@ class ModelManager: ObservableObject {
         self.ollamaService = ollamaService
         loadSelectedModel()
         
+        NSLog("ModelManager: Initialized with connection status: \(ollamaService.isConnected)")
+        
         // Observe OllamaService connection status
         ollamaService.$isConnected
             .assign(to: \.isConnected, on: self)
@@ -45,23 +47,30 @@ class ModelManager: ObservableObject {
         isLoading = true
         errorMessage = nil
         
+        NSLog("ModelManager: Starting to fetch available models...")
+        
         do {
             let models = try await ollamaService.getAvailableModels()
             availableModels = models.sorted()
             
+            NSLog("ModelManager: Successfully fetched \(models.count) models: \(models)")
+            
             // If no model is selected and we have models, select the first one
             if selectedModelName == nil && !models.isEmpty {
                 selectModel(modelName: models.first!)
+                NSLog("ModelManager: Auto-selected first model: \(models.first!)")
             }
             
             // Validate that the selected model still exists
             if let selectedModel = selectedModelName,
                !models.contains(selectedModel) {
+                NSLog("ModelManager: Previously selected model '\(selectedModel)' no longer available")
                 selectedModelName = nil
                 saveSelectedModel()
             }
             
         } catch {
+            NSLog("ModelManager: Error fetching models: \(error)")
             errorMessage = error.localizedDescription
             availableModels = []
         }

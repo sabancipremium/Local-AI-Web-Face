@@ -92,7 +92,7 @@ class AvatarScene: SKScene {
     }
     
     private func createPlaceholderTexture(color: NSColor, size: CGSize) -> SKTexture {
-        let renderer = NSGraphicsContext.current?.cgContext
+        let _ = NSGraphicsContext.current?.cgContext
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let context = CGContext(data: nil, width: Int(size.width), height: Int(size.height), 
                               bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, 
