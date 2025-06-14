@@ -180,6 +180,8 @@ class OllamaService: ObservableObject {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
+                    NSLog("[OllamaService] Starting chat with model: \(model), prompt: '\(prompt.prefix(50))...'")
+                    
                     // Convert ChatMessage history to OllamaMessage format
                     var messages: [OllamaMessage] = history.map { chatMessage in
                         OllamaMessage(
@@ -188,32 +190,48 @@ class OllamaService: ObservableObject {
                         )
                     }
                     
+                    NSLog("[OllamaService] Converted \(history.count) history messages")
+                    
                     // Add the new user message
                     messages.append(OllamaMessage(role: "user", content: prompt))
+                    NSLog("[OllamaService] Total messages to send: \(messages.count)")
                     
                     let request = ChatRequest(model: model, messages: messages, stream: true)
                     let requestData = try encoder.encode(request)
                     
-                    var urlRequest = URLRequest(url: baseURL.appendingPathComponent("chat"))
+                    let chatURL = baseURL.appendingPathComponent("chat")
+                    NSLog("[OllamaService] Chat URL: \(chatURL)")
+                    
+                    var urlRequest = URLRequest(url: chatURL)
                     urlRequest.httpMethod = "POST"
                     urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     urlRequest.httpBody = requestData
+                    
+                    NSLog("[OllamaService] Sending chat request...")
                     
                     // Use URLSession.bytes to handle streaming properly
                     let (asyncBytes, response) = try await urlSession.bytes(for: urlRequest)
                     
                     guard let httpResponse = response as? HTTPURLResponse else {
+                        NSLog("[OllamaService] Invalid response type for chat request")
                         continuation.finish(throwing: OllamaError.invalidResponse)
                         return
                     }
                     
+                    NSLog("[OllamaService] Chat request HTTP status: \(httpResponse.statusCode)")
+                    
                     guard httpResponse.statusCode == 200 else {
+                        NSLog("[OllamaService] Chat request failed with status: \(httpResponse.statusCode)")
                         continuation.finish(throwing: OllamaError.httpError(httpResponse.statusCode))
                         return
                     }
                     
+                    NSLog("[OllamaService] Chat request successful, starting to process stream")
+                    
                     // Process streaming response line by line
                     var buffer = ""
+                    var chunkCount = 0
+                    var totalContent = ""
                     
                     for try await byte in asyncBytes {
                         let character = Character(UnicodeScalar(byte))
@@ -225,20 +243,26 @@ class OllamaService: ObservableObject {
                             
                             guard !line.isEmpty else { continue }
                             
+                            chunkCount += 1
+                            NSLog("[OllamaService] Processing chat chunk \(chunkCount): \(line.prefix(100))...")
+                            
                             do {
                                 let chunk = try decoder.decode(ChatResponseChunk.self, from: Data(line.utf8))
                                 
                                 if let content = chunk.message?.content, !content.isEmpty {
+                                    totalContent += content
+                                    NSLog("[OllamaService] Yielding content chunk: '\(content)' (total length: \(totalContent.count))")
                                     continuation.yield(content)
                                 }
                                 
                                 if chunk.done {
+                                    NSLog("[OllamaService] Chat completed, total chunks: \(chunkCount), total content length: \(totalContent.count)")
                                     continuation.finish()
                                     return
                                 }
                             } catch {
                                 // Skip malformed JSON chunks but continue processing
-                                NSLog("[OllamaService] Failed to decode chunk: \(line), error: \(error)")
+                                NSLog("[OllamaService] Failed to decode chat chunk: \(line), error: \(error)")
                                 continue
                             }
                         } else {
@@ -246,11 +270,130 @@ class OllamaService: ObservableObject {
                         }
                     }
                     
+                    NSLog("[OllamaService] Chat stream ended, processed \(chunkCount) chunks")
                     continuation.finish()
                     
                 } catch {
                     NSLog("[OllamaService] Chat error: \(error)")
                     continuation.finish(throwing: OllamaError.networkError(error))
+                }
+            }
+        }
+    }
+    
+    public func streamChat(messages: [ChatMessage], model: String, completion: @escaping (String?, Bool, Error?) -> Void) {
+        Task {
+            var streamDidSignalDone = false // To track if completion has been called with isDone=true
+            do {
+                NSLog("[OllamaService] Starting streamChat with model: \(model), messages count: \(messages.count)")
+                
+                // Convert ChatMessage history to OllamaMessage format
+                let requestMessages = messages.map { chatMessage in
+                    OllamaMessage(
+                        role: chatMessage.sender == .user ? "user" : "assistant",
+                        content: chatMessage.content
+                    )
+                }
+                
+                NSLog("[OllamaService] Converted \(requestMessages.count) messages for request")
+                
+                let request = ChatRequest(model: model, messages: requestMessages, stream: true)
+                let requestData = try encoder.encode(request)
+                
+                let chatURL = baseURL.appendingPathComponent("chat")
+                NSLog("[OllamaService] Chat URL: \(chatURL)")
+                
+                var urlRequest = URLRequest(url: chatURL)
+                urlRequest.httpMethod = "POST"
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                urlRequest.httpBody = requestData
+                
+                NSLog("[OllamaService] Sending streamChat request...")
+                
+                // Use URLSession.bytes to handle streaming properly
+                let (asyncBytes, response) = try await urlSession.bytes(for: urlRequest)
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    NSLog("[OllamaService] Invalid response type for streamChat request")
+                    if !streamDidSignalDone {
+                        completion(nil, true, OllamaError.invalidResponse)
+                        streamDidSignalDone = true
+                    }
+                    return
+                }
+                
+                NSLog("[OllamaService] StreamChat request HTTP status: \(httpResponse.statusCode)")
+                
+                guard httpResponse.statusCode == 200 else {
+                    NSLog("[OllamaService] StreamChat request failed with status: \(httpResponse.statusCode)")
+                    if !streamDidSignalDone {
+                        completion(nil, true, OllamaError.httpError(httpResponse.statusCode))
+                        streamDidSignalDone = true
+                    }
+                    return
+                }
+                
+                NSLog("[OllamaService] StreamChat request successful, starting to process stream")
+                
+                // Process streaming response line by line
+                var buffer = ""
+                var chunkCount = 0
+                var totalContent = ""
+                
+                for try await byte in asyncBytes {
+                    let character = Character(UnicodeScalar(byte))
+                    
+                    if character == "\n" {
+                        // Process complete line
+                        let line = buffer.trimmingCharacters(in: .whitespacesAndNewlines)
+                        buffer = ""
+                        
+                        guard !line.isEmpty else { continue }
+                        
+                        chunkCount += 1
+                        NSLog("[OllamaService] Processing streamChat chunk \(chunkCount): \(line.prefix(100))...")
+                        
+                        do {
+                            let chunk = try decoder.decode(ChatResponseChunk.self, from: Data(line.utf8))
+                            
+                            if let content = chunk.message?.content, !content.isEmpty {
+                                totalContent += content
+                                NSLog("[OllamaService] Yielding content chunk: '\(content)' (total length: \(totalContent.count))")
+                                completion(content, false, nil)
+                            }
+                            
+                            if chunk.done {
+                                NSLog("[OllamaService] Chunk marked done. Signaling completion with isDone=true.")
+                                completion(nil, true, nil)
+                                streamDidSignalDone = true
+                                return // Stream finished successfully
+                            }
+                        } catch {
+                            // Skip malformed JSON chunks but continue processing
+                            NSLog("[OllamaService] Failed to decode streamChat chunk: \(line), error: \(error)")
+                            continue
+                        }
+                    } else {
+                        buffer.append(character)
+                    }
+                }
+                
+                // If the loop completes without chunk.done being true (e.g., stream just ends without a final 'done' marker)
+                if !streamDidSignalDone {
+                    NSLog("[OllamaService] Stream loop finished without explicit 'done' chunk. Signaling completion with isDone=true.")
+                    completion(nil, true, nil) // Ensure 'done' is signaled
+                    streamDidSignalDone = true 
+                }
+                
+                NSLog("[OllamaService] StreamChat completed, total chunks: \(chunkCount), total content length: \(totalContent.count)")
+
+            } catch {
+                if !streamDidSignalDone {
+                    NSLog("[OllamaService] Stream caught error: \(error.localizedDescription). Signaling completion with isDone=true and error.")
+                    completion(nil, true, error)
+                } else {
+                    // Error occurred after stream was already marked done, log it but don't call completion again.
+                    NSLog("[OllamaService] Stream caught error: \(error.localizedDescription), but stream already signaled done. Error not sent to completion handler again.")
                 }
             }
         }
@@ -322,52 +465,81 @@ class OllamaService: ObservableObject {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
+                    NSLog("[OllamaService] Starting pull for model: \(modelName)")
+                    
                     let request = PullRequest(name: modelName, stream: true)
                     let requestData = try encoder.encode(request)
                     
-                    var urlRequest = URLRequest(url: baseURL.appendingPathComponent("pull"))
+                    let pullURL = baseURL.appendingPathComponent("pull")
+                    NSLog("[OllamaService] Pull URL: \(pullURL)")
+                    
+                    var urlRequest = URLRequest(url: pullURL)
                     urlRequest.httpMethod = "POST"
                     urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
                     urlRequest.httpBody = requestData
                     
-                    let (data, response) = try await urlSession.data(for: urlRequest)
+                    NSLog("[OllamaService] Sending pull request for model: \(modelName)")
                     
+                    // Use URLSession.bytes to stream the response
+                    let (asyncBytes, response) = try await urlSession.bytes(for: urlRequest)
+
                     guard let httpResponse = response as? HTTPURLResponse else {
+                        NSLog("[OllamaService] Invalid response type for pull request")
                         continuation.finish(throwing: OllamaError.invalidResponse)
                         return
                     }
-                    
+
+                    NSLog("[OllamaService] Pull request HTTP status: \(httpResponse.statusCode)")
+
                     guard httpResponse.statusCode == 200 else {
+                        NSLog("[OllamaService] Pull request failed with status: \(httpResponse.statusCode)")
                         continuation.finish(throwing: OllamaError.httpError(httpResponse.statusCode))
                         return
                     }
-                    
-                    // Parse streaming response
-                    let dataString = String(data: data, encoding: .utf8) ?? ""
-                    let lines = dataString.components(separatedBy: .newlines)
-                    
-                    for line in lines {
-                        let trimmedLine = line.trimmingCharacters(in: .whitespacesAndNewlines)
-                        guard !trimmedLine.isEmpty else { continue }
-                        
-                        do {
-                            let status = try decoder.decode(OllamaPullStatus.self, from: Data(trimmedLine.utf8))
-                            continuation.yield(status)
+
+                    NSLog("[OllamaService] Pull request successful, starting to process stream")
+
+                    // Process streaming bytes into lines
+                    var buffer = ""
+                    var lineCount = 0
+                    for try await byte in asyncBytes {
+                        let char = Character(UnicodeScalar(byte))
+                        if char == "\n" {
+                            let line = buffer.trimmingCharacters(in: .whitespacesAndNewlines)
+                            buffer = ""
+                            guard !line.isEmpty else { continue }
                             
-                            // Check if this is the final status
-                            if status.status.contains("success") || status.status.contains("complete") {
-                                continuation.finish()
-                                return
+                            lineCount += 1
+                            NSLog("[OllamaService] Processing pull status line \(lineCount): \(line)")
+                            
+                            do {
+                                let status = try decoder.decode(OllamaPullStatus.self, from: Data(line.utf8))
+                                NSLog("[OllamaService] Decoded pull status: \(status.status)")
+                                if let progress = status.progressPercentage {
+                                    NSLog("[OllamaService] Pull progress: \(String(format: "%.1f", progress))%")
+                                }
+                                continuation.yield(status)
+                                
+                                if status.status.contains("success") || status.status.contains("complete") {
+                                    NSLog("[OllamaService] Pull completed successfully")
+                                    continuation.finish()
+                                    return
+                                }
+                            } catch {
+                                NSLog("[OllamaService] Failed to decode pull status line: \(line), error: \(error)")
+                                // Skip malformed JSON but continue
+                                continue
                             }
-                        } catch {
-                            // Skip malformed JSON but continue processing
-                            continue
+                        } else {
+                            buffer.append(char)
                         }
                     }
                     
+                    NSLog("[OllamaService] Pull stream ended, processed \(lineCount) lines")
                     continuation.finish()
                     
                 } catch {
+                    NSLog("[OllamaService] Pull error for model \(modelName): \(error)")
                     continuation.finish(throwing: error)
                 }
             }

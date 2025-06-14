@@ -89,7 +89,7 @@ func testChatAPI() async {
 // Main test function
 func runTests() async {
     print("🧪 Testing Local-AI-Web-Face App Functionality")
-    print("=" * 50)
+    print(String(repeating: "=", count: 50))
     
     print("\n📡 Testing Ollama API connectivity...")
     await testOllamaAPI()

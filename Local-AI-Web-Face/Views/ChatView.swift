@@ -7,6 +7,7 @@ import SwiftUI
 
 struct ChatView: View {
     @EnvironmentObject var chatViewModel: ChatViewModel
+    @EnvironmentObject var ttsManager: TTSManager
     @FocusState private var isInputFocused: Bool
     
     var body: some View {
@@ -310,4 +311,72 @@ struct ChatInputView: View {
         .environmentObject(ChatViewModel.previewWithError())
         .environmentObject(SettingsViewModel.preview())
         .frame(width: 600, height: 800)
+}
+
+struct MessageView: View {
+    let message: ChatMessage
+
+    var body: some View {
+        HStack(alignment: .bottom, spacing: 10) {
+            if !message.isFromUser {
+                Circle()
+                    .fill(Color.blue.opacity(0.7))
+                    .frame(width: 30, height: 30)
+                    .overlay(
+                        Image(systemName: "cpu")
+                            .foregroundColor(.white)
+                            .font(.caption)
+                    )
+                    .padding(.leading, 5)
+            }
+
+            VStack(alignment: message.isFromUser ? .trailing : .leading, spacing: 4) {
+                if message.isLoading && message.content.isEmpty && !message.isError {
+                    // Only show "Thinking..." if content is empty and it's loading and not an error
+                    HStack {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+                        Text("Thinking...")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(10)
+                    .background(message.isFromUser ? Color.blue.opacity(0.8) : Color.gray.opacity(0.2))
+                    .cornerRadius(10)
+                } else if message.isError {
+                    Text("Error: \(message.content)")
+                        .padding(10)
+                        .background(Color.red.opacity(0.7))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .textSelection(.enabled)
+                } else {
+                    Text(message.content.isEmpty && !message.isFromUser ? "Receiving..." : message.content) // Show "Receiving..." if content is empty but not the initial "Thinking..." state
+                        .padding(10)
+                        .background(message.isFromUser ? Color.blue.opacity(0.8) : Color.gray.opacity(0.2))
+                        .foregroundColor(message.isFromUser ? .white : .primary)
+                        .cornerRadius(10)
+                        .textSelection(.enabled)
+                }
+                Text(message.timestamp, style: .time)
+                    .font(.caption2)
+                    .foregroundColor(.gray)
+            }
+
+            if message.isFromUser {
+                Circle()
+                    .fill(Color.green.opacity(0.7))
+                    .frame(width: 30, height: 30)
+                    .overlay(
+                        Image(systemName: "person")
+                            .foregroundColor(.white)
+                            .font(.caption)
+                    )
+                    .padding(.trailing, 5)
+            }
+        }
+        .id(message.id) // Important for ScrollViewReader
+        .frame(maxWidth: .infinity, alignment: message.isFromUser ? .trailing : .leading)
+        .padding(.vertical, 2)
+    }
 }

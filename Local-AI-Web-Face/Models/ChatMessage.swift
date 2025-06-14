@@ -94,36 +94,46 @@ struct ChatMessage: Identifiable, Codable, Equatable {
     }
     
     var displayContent: String {
-        return isLoading ? "Thinking..." : content
+        let result = isLoading ? "Thinking..." : content
+        NSLog("[ChatMessage] displayContent for ID \(id): isLoading=\(isLoading), content length=\(content.count), returning: '\(result.prefix(50))...'")
+        return result
     }
     
     // MARK: - Methods
     
     mutating func updateContent(_ newContent: String) {
+        NSLog("[ChatMessage] updateContent called for ID \(id), old content length: \(content.count), new content length: \(newContent.count), was loading: \(isLoading)")
         self.content = newContent
-        self.isLoading = false
+        // Don't automatically set isLoading = false here - let the streaming finish control this
+        NSLog("[ChatMessage] updateContent completed, content updated but keeping loading state: \(isLoading)")
     }
     
     mutating func appendContent(_ additionalContent: String) {
+        NSLog("[ChatMessage] appendContent called for ID \(id), additional content: '\(additionalContent)'")
         if isLoading {
             self.content = additionalContent
             self.isLoading = false
         } else {
             self.content += additionalContent
         }
+        NSLog("[ChatMessage] appendContent completed, total content length: \(content.count)")
     }
     
     mutating func markAsError(_ errorMessage: String) {
+        NSLog("[ChatMessage] markAsError called for ID \(id), error: \(errorMessage)")
         self.isError = true
         self.isLoading = false
         self.errorMessage = errorMessage
         if self.content.isEmpty {
             self.content = "Sorry, I encountered an error."
         }
+        NSLog("[ChatMessage] markAsError completed")
     }
     
     mutating func finishLoading() {
+        NSLog("[ChatMessage] finishLoading called for ID \(id), was loading: \(isLoading)")
         self.isLoading = false
+        NSLog("[ChatMessage] finishLoading completed, isLoading now: \(isLoading)")
     }
     
     // MARK: - Equatable Conformance

@@ -81,70 +81,108 @@ class ChatViewModel: ObservableObject {
     func sendMessage() {
         let trimmedInput = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        guard !trimmedInput.isEmpty else { return }
-        guard !isLoading else { return }
+        NSLog("[ChatViewModel] sendMessage called with input: '\(trimmedInput)'")
+        
+        guard !trimmedInput.isEmpty else { 
+            NSLog("[ChatViewModel] Input is empty, returning")
+            return 
+        }
+        guard !isLoading else { 
+            NSLog("[ChatViewModel] Already loading, returning")
+            return 
+        }
         guard !currentModelName.isEmpty else {
+            NSLog("[ChatViewModel] No model selected")
             errorMessage = "Please select a model first"
             return
         }
         guard isConnected else {
+            NSLog("[ChatViewModel] Not connected to Ollama")
             errorMessage = "Not connected to Ollama. Please check if Ollama is running."
             return
         }
+        
+        NSLog("[ChatViewModel] All checks passed, proceeding with message send")
         
         // Clear previous errors
         errorMessage = nil
         
         // Create user message
         let userMessage = ChatMessage.userMessage(trimmedInput)
+        NSLog("[ChatViewModel] Created user message with ID: \(userMessage.id)")
         messages.append(userMessage)
+        NSLog("[ChatViewModel] User message added, messages count: \(messages.count)")
         
         // Clear input and set loading state
         inputText = ""
         isLoading = true
+        NSLog("[ChatViewModel] Input cleared, isLoading set to true")
         
         // Create placeholder bot message
         let botMessage = ChatMessage.loadingBotMessage()
+        NSLog("[ChatViewModel] Created bot message with ID: \(botMessage.id), isLoading: \(botMessage.isLoading)")
         messages.append(botMessage)
+        NSLog("[ChatViewModel] Bot message added, messages count: \(messages.count)")
         
         // Start streaming response
+        NSLog("[ChatViewModel] Starting streaming task")
         currentStreamTask = Task {
             await streamBotResponse(userPrompt: trimmedInput, botMessageId: botMessage.id)
         }
     }
     
     private func streamBotResponse(userPrompt: String, botMessageId: UUID) async {
-        do {
-            var responseContent = ""
+        NSLog("[ChatViewModel] Starting to stream bot response for message ID: \(botMessageId)")
+        NSLog("[ChatViewModel] Current messages count: \(messages.count)")
+        
+        // Use the new streamChat method with completion handler
+        ollamaService.streamChat(
+            messages: getConversationHistory(),
+            model: currentModelName
+        ) { [weak self] responseTextChunk, isDone, error in
+            guard let self = self else { return }
             
-            for try await chunk in ollamaService.sendChatMessage(
-                prompt: userPrompt,
-                model: currentModelName,
-                history: getConversationHistory()
-            ) {
-                responseContent += chunk
+            DispatchQueue.main.async {
+                guard let botMessageIndex = self.messages.firstIndex(where: { $0.id == botMessageId }) else {
+                    NSLog("[ChatViewModel] Error: Could not find bot message with ID \(botMessageId) to update.")
+                    return
+                }
                 
-                // Update the bot message with accumulated content
-                if let index = messages.firstIndex(where: { $0.id == botMessageId }) {
-                    messages[index].updateContent(responseContent)
+                if let error = error {
+                    NSLog("[ChatViewModel] Received error for ID \(botMessageId): \(error.localizedDescription)")
+                    var errorMessage = self.messages[botMessageIndex]
+                    errorMessage.markAsError(error.localizedDescription)
+                    self.messages[botMessageIndex] = errorMessage
+                    self.isLoading = false
+                    self.errorMessage = error.localizedDescription
+                    return
+                }
+                
+                if let textChunk = responseTextChunk {
+                    NSLog("[ChatViewModel] Received chunk for ID \(botMessageId): '\(textChunk)'")
+                    var updatedMessage = self.messages[botMessageIndex]
+                    
+                    // If this is the first chunk and content is empty, replace it
+                    if updatedMessage.content.isEmpty {
+                        updatedMessage.content = textChunk
+                    } else {
+                        updatedMessage.content += textChunk
+                    }
+                    
+                    // Keep the message in loading state while streaming
+                    updatedMessage.isLoading = true
+                    self.messages[botMessageIndex] = updatedMessage
+                }
+                
+                if isDone {
+                    NSLog("[ChatViewModel] Received isDone=true for ID \(botMessageId). Finalizing message.")
+                    var finishedMessage = self.messages[botMessageIndex]
+                    finishedMessage.finishLoading()
+                    self.messages[botMessageIndex] = finishedMessage
+                    self.isLoading = false
+                    NSLog("[ChatViewModel] Message finalized, isLoading: \(finishedMessage.isLoading)")
                 }
             }
-            
-            // Finish loading state
-            if let index = messages.firstIndex(where: { $0.id == botMessageId }) {
-                messages[index].finishLoading()
-            }
-            
-            isLoading = false
-            
-        } catch {
-            // Handle streaming error
-            if let index = messages.firstIndex(where: { $0.id == botMessageId }) {
-                messages[index].markAsError(error.localizedDescription)
-            }
-            
-            errorMessage = error.localizedDescription
-            isLoading = false
         }
     }
     
